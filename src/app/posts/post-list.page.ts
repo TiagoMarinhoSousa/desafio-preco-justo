@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostService } from './services/post.service';
 import { Post } from './models/post.model';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, catchError, tap } from 'rxjs/operators';
 import { PostFormComponent } from './components/post-form.component';
 import { ModalComponent } from '../shared/components/modal.component';
 import { FormsModule } from '@angular/forms';
@@ -95,4 +95,37 @@ export class PostListPage {
       this.sortAsc = true;
     }
   }
+
+  handleEditSubmit(updated: Post): void {
+  const currentPosts = this.postsSubject.getValue();
+  const index = currentPosts.findIndex((p) => p.id === updated.id);
+  const original = currentPosts[index];
+
+  const updatedPosts = [...currentPosts];
+  updatedPosts[index] = updated;
+  this.postsSubject.next(updatedPosts);
+
+  this.postService.updatePost(updated).pipe(
+    tap((response) => {
+  console.log('API respondeu com:', response);
+  updatedPosts[index] = response;
+  this.postsSubject.next(updatedPosts);
+}),
+
+    catchError(() => {
+      updatedPosts[index] = original;
+      this.postsSubject.next(updatedPosts);
+      return of(original);
+    })
+  ).subscribe();
+
+  this.editingPost = null;
+}
+
+  editingPost: Post | null = null;
+  startEdit(post: Post): void {
+    this.editingPost = post;
+  }
+
+  
 }

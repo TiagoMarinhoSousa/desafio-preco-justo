@@ -1,9 +1,11 @@
+<h2>{{ post ? 'Editar Post' : 'Novo Post' }}</h2>
+
 
 <form (ngSubmit)="onSubmit()" #form="ngForm" class="mb-6 space-y-4">
   <input
     type="text"
     name="title"
-    [(ngModel)]="newPost.title"
+    [(ngModel)]="formData.title"
     placeholder="Título"
     required
     class="w-full p-2 border rounded"
@@ -11,17 +13,28 @@
   />
   <textarea
     name="body"
-    [(ngModel)]="newPost.body"
+    [(ngModel)]="formData.body"
     placeholder="Conteúdo"
     required
     class="w-full p-2 border rounded"
     aria-label="Conteúdo do post"
   ></textarea>
+ <div class="flex justify-end gap-2">
+  <button
+    type="button"
+    (click)="cancel.emit()"
+    class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+  >
+    Cancelar
+  </button>
+
   <button
     type="submit"
     [disabled]="form.invalid"
     class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
   >
-    Criar Post
+    {{ post ? 'Salvar Alterações' : 'Criar Post' }}
   </button>
+</div>
+
 </form>

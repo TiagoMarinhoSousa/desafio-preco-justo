@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Post } from '../models/post.model';
@@ -9,18 +9,24 @@ import { Post } from '../models/post.model';
   imports: [CommonModule, FormsModule],
   templateUrl: './post-form.component.html',
 })
-export class PostFormComponent {
-  newPost: Partial<Post> = {
+export class PostFormComponent implements OnChanges {
+  @Input() post: Post | null = null;
+  @Output() submitPost = new EventEmitter<Post>();
+
+  formData: Post = {
     title: '',
     body: '',
   };
 
-  @Output() submitPost = new EventEmitter<Post>();
-
-  onSubmit(): void {
-    if (this.newPost.title && this.newPost.body) {
-      this.submitPost.emit(this.newPost as Post);
-      this.newPost = { title: '', body: '' };
+  ngOnChanges(): void {
+    if (this.post) {
+      this.formData = { ...this.post };
     }
   }
+
+  onSubmit(): void {
+    this.submitPost.emit(this.formData);
+  }
+
+  @Output() cancel = new EventEmitter<void>();
 }

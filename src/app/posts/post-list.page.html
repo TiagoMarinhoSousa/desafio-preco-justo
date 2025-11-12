@@ -15,36 +15,35 @@
 />
 
 <table class="w-full table-auto border-collapse">
- <thead>
-  <tr class="bg-gray-100">
-    <th
-      class="p-2 text-left cursor-pointer"
-      (click)="toggleSort('id')"
-    >
-      ID
-      <span *ngIf="sortColumn === 'id'">{{ sortAsc ? '⬆️' : '⬇️' }}</span>
-    </th>
-    <th
-      class="p-2 text-left cursor-pointer"
-      (click)="toggleSort('title')"
-    >
-      Título
-      <span *ngIf="sortColumn === 'title'">{{ sortAsc ? '⬆️' : '⬇️' }}</span>
-    </th>
-    <th
-      class="p-2 text-left cursor-pointer"
-      (click)="toggleSort('body')"
-    >
-      Conteúdo
-      <span *ngIf="sortColumn === 'body'">{{ sortAsc ? '⬆️' : '⬇️' }}</span>
-    </th>
-  </tr>
-</thead>
+  <thead>
+    <tr class="bg-gray-100">
+      <th class="p-2 text-left cursor-pointer" (click)="toggleSort('id')">
+        ID
+        <span *ngIf="sortColumn === 'id'">{{ sortAsc ? '⬆️' : '⬇️' }}</span>
+      </th>
+      <th class="p-2 text-left cursor-pointer" (click)="toggleSort('title')">
+        Título
+        <span *ngIf="sortColumn === 'title'">{{ sortAsc ? '⬆️' : '⬇️' }}</span>
+      </th>
+      <th class="p-2 text-left cursor-pointer" (click)="toggleSort('body')">
+        Conteúdo
+        <span *ngIf="sortColumn === 'body'">{{ sortAsc ? '⬆️' : '⬇️' }}</span>
+      </th>
+      <th class="p-2 text-right">Ações</th>
+
+    </tr>
+  </thead>
   <tbody>
     <tr *ngFor="let post of filteredPosts$ | async" class="border-t">
       <td class="p-2">{{ post.id }}</td>
       <td class="p-2">{{ post.title }}</td>
       <td class="p-2">{{ post.body }}</td>
+      <td class="p-2 text-right">
+        <button (click)="startEdit(post)" class="text-blue-600 hover:underline">
+          Editar
+        </button>
+      </td>
+      
     </tr>
   </tbody>
 </table>
@@ -67,7 +66,19 @@
   </button>
 </div>
 
-<!-- Modal com formulário -->
+<!-- Modal de criação -->
 <app-modal *ngIf="showModal" (close)="showModal = false">
-  <app-post-form (submitPost)="handleModalSubmit($event)"></app-post-form>
+  <app-post-form
+    (submitPost)="handleModalSubmit($event)"
+    (cancel)="showModal = false"
+  ></app-post-form>
 </app-modal>
+
+<app-modal *ngIf="editingPost" (close)="editingPost = null">
+  <app-post-form
+    [post]="editingPost"
+    (submitPost)="handleEditSubmit($event)"
+    (cancel)="editingPost = null"
+  ></app-post-form>
+</app-modal>
+
