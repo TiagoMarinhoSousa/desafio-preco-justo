@@ -1,1 +1,10 @@
-<p>post-list works!</p>
+<div class="p-6">
+  <h1 class="text-2xl font-bold text-blue-600 mb-4">Listagem de Posts</h1>
+
+  <ul *ngIf="posts$ | async as posts" class="space-y-4">
+    <li *ngFor="let post of posts" class="bg-white p-4 rounded shadow">
+      <h2 class="text-xl font-semibold text-gray-800">{{ post.title }}</h2>
+      <p class="text-gray-600 mt-2">{{ post.body }}</p>
+    </li>
+  </ul>
+</div>
