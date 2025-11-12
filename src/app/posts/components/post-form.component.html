@@ -1,0 +1,27 @@
+
+<form (ngSubmit)="onSubmit()" #form="ngForm" class="mb-6 space-y-4">
+  <input
+    type="text"
+    name="title"
+    [(ngModel)]="newPost.title"
+    placeholder="Título"
+    required
+    class="w-full p-2 border rounded"
+    aria-label="Título do post"
+  />
+  <textarea
+    name="body"
+    [(ngModel)]="newPost.body"
+    placeholder="Conteúdo"
+    required
+    class="w-full p-2 border rounded"
+    aria-label="Conteúdo do post"
+  ></textarea>
+  <button
+    type="submit"
+    [disabled]="form.invalid"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+  >
+    Criar Post
+  </button>
+</form>

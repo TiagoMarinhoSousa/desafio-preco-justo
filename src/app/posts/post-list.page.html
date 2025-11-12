@@ -1,10 +1,73 @@
-<div class="p-6">
-  <h1 class="text-2xl font-bold text-blue-600 mb-4">Listagem de Posts</h1>
+<!-- Botão para abrir o modal -->
+<button
+  (click)="showModal = true"
+  class="bg-green-600 text-white px-4 py-2 rounded mb-4 hover:bg-green-700"
+>
+  Novo Post
+</button>
 
-  <ul *ngIf="posts$ | async as posts" class="space-y-4">
-    <li *ngFor="let post of posts" class="bg-white p-4 rounded shadow">
-      <h2 class="text-xl font-semibold text-gray-800">{{ post.title }}</h2>
-      <p class="text-gray-600 mt-2">{{ post.body }}</p>
-    </li>
-  </ul>
+<!-- Campo de busca -->
+<input
+  type="text"
+  [(ngModel)]="searchTerm"
+  placeholder="Buscar por título ou conteúdo"
+  class="mb-4 p-2 border rounded w-full"
+/>
+
+<table class="w-full table-auto border-collapse">
+ <thead>
+  <tr class="bg-gray-100">
+    <th
+      class="p-2 text-left cursor-pointer"
+      (click)="toggleSort('id')"
+    >
+      ID
+      <span *ngIf="sortColumn === 'id'">{{ sortAsc ? '⬆️' : '⬇️' }}</span>
+    </th>
+    <th
+      class="p-2 text-left cursor-pointer"
+      (click)="toggleSort('title')"
+    >
+      Título
+      <span *ngIf="sortColumn === 'title'">{{ sortAsc ? '⬆️' : '⬇️' }}</span>
+    </th>
+    <th
+      class="p-2 text-left cursor-pointer"
+      (click)="toggleSort('body')"
+    >
+      Conteúdo
+      <span *ngIf="sortColumn === 'body'">{{ sortAsc ? '⬆️' : '⬇️' }}</span>
+    </th>
+  </tr>
+</thead>
+  <tbody>
+    <tr *ngFor="let post of filteredPosts$ | async" class="border-t">
+      <td class="p-2">{{ post.id }}</td>
+      <td class="p-2">{{ post.title }}</td>
+      <td class="p-2">{{ post.body }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Paginação -->
+<div class="mt-4 flex justify-between items-center">
+  <button
+    (click)="currentPage = currentPage - 1"
+    [disabled]="currentPage === 1"
+    class="px-3 py-1 bg-gray-200 rounded"
+  >
+    Anterior
+  </button>
+  <span>Página {{ currentPage }}</span>
+  <button
+    (click)="currentPage = currentPage + 1"
+    class="px-3 py-1 bg-gray-200 rounded"
+  >
+    Próxima
+  </button>
 </div>
+
+<!-- Modal com formulário -->
+<app-modal *ngIf="showModal" (close)="showModal = false">
+  <app-post-form (submitPost)="handleModalSubmit($event)"></app-post-form>
+</app-modal>

@@ -14,4 +14,8 @@ export class PostService {
   getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(this.API_URL);
   }
+
+  createPost(post: Post): Observable<Post> {
+    return this.http.post<Post>(this.API_URL, post);
+  }
 }
