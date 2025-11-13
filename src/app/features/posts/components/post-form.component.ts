@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Post } from '../models/post.model';
+import { Post } from '../../../core/models/post.model';
 
 @Component({
   selector: 'app-post-form',

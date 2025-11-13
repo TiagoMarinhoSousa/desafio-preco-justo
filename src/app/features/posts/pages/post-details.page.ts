@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { CommentService } from '../../comments/services/comments.service';
-import { Comment } from '../../comments/models/comments.model';
-import { CommentListComponent } from '../../comments/components/comment-list/comment-list.component';
+import { CommentService } from '../../../core/services/comments.service';
+import { Comment } from '../../../core/models/comments.model';
+import { CommentListComponent } from '../../comments/comment-list.component';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { ModalComponent } from 'src/app/shared/components/modal.component';

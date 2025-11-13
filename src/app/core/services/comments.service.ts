@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Comment } from '../../comments/models/comments.model';
+import { Comment } from '../../core/models/comments.model';
 
 @Injectable({ providedIn: 'root' })
 export class CommentService {

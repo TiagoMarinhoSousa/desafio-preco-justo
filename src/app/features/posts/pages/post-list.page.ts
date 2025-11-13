@@ -170,8 +170,8 @@
 // }
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PostService } from '../services/post.service';
-import { Post } from '../models/post.model';
+import { PostService } from '../../../core/services/post.service';
+import { Post } from '../../../core/models/post.model';
 import { BehaviorSubject, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { PostFormComponent } from '../components/post-form.component';

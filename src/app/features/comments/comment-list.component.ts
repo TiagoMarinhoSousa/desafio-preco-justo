@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Comment } from '../../models/comments.model';
+import { Comment } from '../../core/models/comments.model';
 
 @Component({
   selector: 'app-comment-list',
