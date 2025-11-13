@@ -1,12 +1,18 @@
-<h1 class="text-2xl font-bold mb-4">Comentários do Post #{{ postId }}</h1>
+<div class="flex items-center justify-between mb-6 bg-gray-100 p-4 rounded"> 
+  <h1 class="text-2xl font-bold">Comentários do Post #{{ postId }}</h1> 
+  <div class="flex items-center gap-2">
+    <button (click)="onAddComment()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+      Adicionar Comentário
+    </button>   
+    <a [routerLink]="['/posts']" class="bg-gray-300 text-black p-2 rounded hover:bg-gray-400" title="Voltar para Posts">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+  </div>
+</div>
 
-<button (click)="onAddComment()" class="bg-green-600 text-white px-4 py-2 rounded mb-4">
-  Adicionar Comentário
-</button>
-
-<a [routerLink]="['/posts']" class="inline-block bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400 mb-4">
-  ← Voltar para Posts
-</a>
 
 
 <ng-container *ngIf="comments$ | async as comments">
