@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { PostListPage } from './posts/post-list.page';
+import { PostListPage } from './features/posts/post-list.page';
 
 export const routes: Routes = [
   {

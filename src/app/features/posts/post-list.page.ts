@@ -5,7 +5,7 @@ import { Post } from './models/post.model';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { PostFormComponent } from './components/post-form.component';
-import { ModalComponent } from '../shared/components/modal.component';
+import { ModalComponent } from '../../shared/components/modal.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
