@@ -13,8 +13,6 @@
   </div>
 </div>
 
-
-
 <ng-container *ngIf="comments$ | async as comments">
   <app-comment-list
     [comments]="comments"
@@ -47,4 +45,18 @@
     <button (click)="onConfirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded">Excluir</button>
   </div>
 </app-modal>
+
+<div *ngIf="isLoading" class="flex justify-center items-center py-10">
+  <svg class="animate-spin h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+    <path class="opacity-75" fill="currentColor"
+      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+    </path>
+  </svg>
+  <span class="ml-2 text-gray-600">Carregando comentários...</span>
+</div>
+
+<div *ngIf="errorMessage && !isLoading" class="text-center text-red-600 py-4">
+  {{ errorMessage }}
+</div>
 

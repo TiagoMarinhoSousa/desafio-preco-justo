@@ -204,22 +204,35 @@ export class PostListPage {
   editingPost: Post | null = null;
   pendingDelete: Post | null = null;
   errorMessage: string | null = null;
+  isLoading = true;
 
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
-    this.postService
-      .getPosts()
-      .pipe(
-        catchError((err) => {
-          this.errorMessage = 'Erro ao carregar os posts.';
-          return of([]);
-        })
-      )
-      .subscribe((posts) => {
-        this.postsSubject.next(posts);
-      });
+    this.isLoading = true;
+    setTimeout(() => {
+      this.postService
+        .getPosts()
+        .pipe(
+          catchError((err) => {
+            this.errorMessage = 'Erro ao carregar os posts.';
+            return of([]);
+          }),
+          tap(() => (this.isLoading = false))
+        )
+        .subscribe((posts) => {
+          this.postsSubject.next(posts);
+          this.isLoading = false;
+        });
+    });
+    // }, 2000); // simula 2 segundos de carregamento para teste
   }
+
+  //COMENTE O BLOCO ACIMA E DESCOMENTE O BLOCO ABAIXO PARA TESTAR O ESTADO DE ERRO
+  //ngOnInit(): void {
+  //   this.isLoading = false;
+  //   this.errorMessage = 'Erro ao carregar os posts.';
+  // }
 
   get filteredPosts(): Post[] {
     return this.postsSubject

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CommentService } from '../../comments/services/comments.service';
 import { Comment } from '../../comments/models/comments.model';
 import { CommentListComponent } from '../../comments/components/comment-list/comment-list.component';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { ModalComponent } from 'src/app/shared/components/modal.component';
 import { FormsModule } from '@angular/forms';
@@ -29,6 +29,8 @@ export class PostDetailPage implements OnInit {
   confirmModalVisible = false;
   commentToDelete: number | null = null;
   editingComment: Comment | null = null;
+  isLoading = true;
+  errorMessage: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,7 +39,20 @@ export class PostDetailPage implements OnInit {
 
   ngOnInit(): void {
     this.postId = Number(this.route.snapshot.paramMap.get('id'));
-    this.commentService.getCommentsByPost(this.postId).subscribe();
+    this.isLoading = true;
+
+    this.commentService
+      .getCommentsByPost(this.postId)
+      .pipe(
+        catchError((err) => {
+          this.errorMessage = 'Erro ao carregar os comentários.';
+          this.isLoading = false;
+          return of([]);
+        }),
+        tap(() => (this.isLoading = false))
+      )
+      .subscribe();
+
     this.comments$ = this.commentService.comments$;
   }
 
@@ -79,7 +94,7 @@ export class PostDetailPage implements OnInit {
     this.editingComment = null;
     this.commentToDelete = null;
   }
-  
+
   onConfirmDelete(): void {
     if (this.commentToDelete !== null) {
       this.commentService.deleteComment(this.commentToDelete).subscribe(() => {
