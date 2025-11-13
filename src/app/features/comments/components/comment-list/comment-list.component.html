@@ -2,9 +2,12 @@
   Nenhum comentário disponível.
 </div>
 
-<ul *ngIf="comments.length > 0" class="space-y-4">
-  <li *ngFor="let comment of comments" class="border p-4 rounded">
-    <p class="font-semibold">{{ comment.name }} <span class="text-sm text-gray-500">({{ comment.email }})</span></p>
-    <p class="mt-2">{{ comment.body }}</p>
-  </li>
-</ul>
+<div *ngFor="let comment of comments" class="border p-4 mb-2 rounded">
+  <p class="font-semibold">{{ comment.name }} <span class="text-sm text-gray-500">({{ comment.email }})</span></p>
+  <p class="mt-2">{{ comment.body }}</p>
+
+  <div class="mt-2 flex gap-2">
+    <button (click)="edit.emit(comment)" class="text-blue-600 hover:underline">Editar</button>
+    <button (click)="delete.emit(comment.id!)" class="text-red-600">Excluir</button>
+  </div>
+</div>

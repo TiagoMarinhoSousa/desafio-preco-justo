@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Comment } from '../../models/comments.model';
 
@@ -10,4 +10,14 @@ import { Comment } from '../../models/comments.model';
 })
 export class CommentListComponent {
   @Input() comments: Comment[] = [];
+  @Output() edit = new EventEmitter<Comment>();
+  @Output() delete = new EventEmitter<number>();
+
+  onEdit(comment: Comment): void {
+    this.edit.emit(comment);
+  }
+
+  onDelete(id: number): void {
+    this.delete.emit(id);
+  }
 }

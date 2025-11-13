@@ -44,6 +44,7 @@
         <button (click)="startDelete(post)" class="text-red-600 hover:underline">
           Excluir
         </button>
+        <a [routerLink]="['/posts', post.id]" class="text-blue-600">Ver detalhes</a>
       </td>
     </tr>
   </tbody>

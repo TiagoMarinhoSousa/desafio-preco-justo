@@ -7,11 +7,13 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { PostFormComponent } from '../components/post-form.component';
 import { ModalComponent } from '../../../shared/components/modal.component';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-post-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, PostFormComponent, ModalComponent],
+  imports: [CommonModule, FormsModule, PostFormComponent, ModalComponent, RouterModule],
   templateUrl: './post-list.page.html',
 })
 export class PostListPage {

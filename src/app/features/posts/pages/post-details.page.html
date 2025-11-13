@@ -1,5 +1,44 @@
-<h1 class="text-2xl font-bold mb-4">Detalhes do Post #{{ postId }}</h1>
+<h1 class="text-2xl font-bold mb-4">Comentários do Post #{{ postId }}</h1>
 
-<div *ngIf="loading" class="text-gray-500">Carregando comentários...</div>
+<button (click)="onAddComment()" class="bg-green-600 text-white px-4 py-2 rounded mb-4">
+  Adicionar Comentário
+</button>
 
-<app-comment-list *ngIf="!loading" [comments]="comments" />
+<a [routerLink]="['/posts']" class="inline-block bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400 mb-4">
+  ← Voltar para Posts
+</a>
+
+
+<ng-container *ngIf="comments$ | async as comments">
+  <app-comment-list
+    [comments]="comments"
+    (edit)="onEditComment($event)"
+    (delete)="onDeleteComment($event)"
+  />
+</ng-container>
+
+<app-modal [title]="'Comentário'" *ngIf="commentModalVisible" (close)="resetModals()">
+  <label class="block mb-2">Nome</label>
+  <input [(ngModel)]="editingComment!.name" class="w-full border px-2 py-1 mb-4" />
+
+  <label class="block mb-2">Email</label>
+  <input [(ngModel)]="editingComment!.email" class="w-full border px-2 py-1 mb-4" />
+
+  <label class="block mb-2">Mensagem</label>
+  <textarea [(ngModel)]="editingComment!.body" class="w-full border px-2 py-1 mb-4"></textarea>
+
+  <div class="flex justify-end gap-2">
+    <button (click)="resetModals()" class="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
+    <button (click)="onSubmitComment(editingComment!)" class="px-4 py-2 bg-green-600 text-white rounded">Salvar</button>
+  </div>
+</app-modal>
+
+<app-modal [title]="'Confirmar exclusão'" *ngIf="confirmModalVisible" (close)="resetModals()">
+  <p class="mb-4">Tem certeza que deseja excluir este comentário?</p>
+
+  <div class="flex justify-end gap-2">
+    <button (click)="resetModals()" class="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
+    <button (click)="onConfirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded">Excluir</button>
+  </div>
+</app-modal>
+

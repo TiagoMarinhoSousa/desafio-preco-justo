@@ -2,32 +2,89 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CommentService } from '../../comments/services/comments.service';
-import { Comment } from '../../comments/models/comments.model'
+import { Comment } from '../../comments/models/comments.model';
 import { CommentListComponent } from '../../comments/components/comment-list/comment-list.component';
+import { Observable } from 'rxjs';
+import { RouterModule } from '@angular/router';
+import { ModalComponent } from 'src/app/shared/components/modal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-post-detail',
   standalone: true,
-  imports: [CommonModule, CommentListComponent],
+  imports: [
+    CommonModule,
+    CommentListComponent,
+    RouterModule,
+    ModalComponent,
+    FormsModule,
+  ],
   templateUrl: './post-details.page.html',
 })
 export class PostDetailPage implements OnInit {
   postId!: number;
-  comments: Comment[] = [];
-  loading = true;
+  comments$!: Observable<Comment[]>;
 
-  constructor(private route: ActivatedRoute, private commentService: CommentService) {}
+  commentModalVisible = false;
+  confirmModalVisible = false;
+  commentToDelete: number | null = null;
+  editingComment: Comment | null = null;
+
+  constructor(
+    private route: ActivatedRoute,
+    private commentService: CommentService
+  ) {}
 
   ngOnInit(): void {
     this.postId = Number(this.route.snapshot.paramMap.get('id'));
-    this.commentService.getCommentsByPost(this.postId).subscribe({
-      next: (data) => {
-        this.comments = data;
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-      },
-    });
+    this.commentService.getCommentsByPost(this.postId).subscribe();
+    this.comments$ = this.commentService.comments$;
+  }
+
+  onAddComment(): void {
+    this.editingComment = {
+      postId: this.postId,
+      name: '',
+      email: '',
+      body: '',
+    };
+    this.commentModalVisible = true;
+  }
+
+  onEditComment(comment: Comment): void {
+    this.editingComment = { ...comment };
+    this.commentModalVisible = true;
+  }
+
+  onDeleteComment(id: number): void {
+    this.commentToDelete = id;
+    this.confirmModalVisible = true; // ← abre o modal, não exclui ainda
+  }
+
+  onSubmitComment(comment: Comment): void {
+    if (comment.id) {
+      this.commentService.updateComment(comment).subscribe(() => {
+        this.resetModals();
+      });
+    } else {
+      this.commentService.addComment(comment).subscribe(() => {
+        this.resetModals();
+      });
+    }
+  }
+
+  resetModals(): void {
+    this.commentModalVisible = false;
+    this.confirmModalVisible = false;
+    this.editingComment = null;
+    this.commentToDelete = null;
+  }
+  
+  onConfirmDelete(): void {
+    if (this.commentToDelete !== null) {
+      this.commentService.deleteComment(this.commentToDelete).subscribe(() => {
+        this.resetModals();
+      });
+    }
   }
 }
