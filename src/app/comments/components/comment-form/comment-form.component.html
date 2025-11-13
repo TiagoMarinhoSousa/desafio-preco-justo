@@ -1,0 +1,21 @@
+<form (ngSubmit)="onSubmit()" class="space-y-4">
+  <div>
+    <label class="block font-medium">Nome</label>
+    <input [(ngModel)]="comment.name" name="name" class="w-full border rounded px-3 py-2" required />
+  </div>
+
+  <div>
+    <label class="block font-medium">Email</label>
+    <input [(ngModel)]="comment.email" name="email" type="email" class="w-full border rounded px-3 py-2" required />
+  </div>
+
+  <div>
+    <label class="block font-medium">Comentário</label>
+    <textarea [(ngModel)]="comment.body" name="body" class="w-full border rounded px-3 py-2" rows="4" required></textarea>
+  </div>
+
+  <div class="flex justify-end gap-2">
+    <button type="button" (click)="cancel.emit()" class="bg-gray-300 px-4 py-2 rounded">Cancelar</button>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Salvar</button>
+  </div>
+</form>
