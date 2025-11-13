@@ -1,0 +1,5 @@
+<h1 class="text-2xl font-bold mb-4">Detalhes do Post #{{ postId }}</h1>
+
+<div *ngIf="loading" class="text-gray-500">Carregando comentários...</div>
+
+<app-comment-list *ngIf="!loading" [comments]="comments" />
