@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 export class PostListPage {
   private postsSubject = new BehaviorSubject<Post[]>([]);
   posts$ = this.postsSubject.asObservable();
-
+  
   searchTerm = '';
   sortColumn: keyof Post = 'id';
   sortAsc = false;
@@ -97,35 +97,63 @@ export class PostListPage {
   }
 
   handleEditSubmit(updated: Post): void {
-  const currentPosts = this.postsSubject.getValue();
-  const index = currentPosts.findIndex((p) => p.id === updated.id);
-  const original = currentPosts[index];
+    const currentPosts = this.postsSubject.getValue();
+    const index = currentPosts.findIndex((p) => p.id === updated.id);
+    const original = currentPosts[index];
 
-  const updatedPosts = [...currentPosts];
-  updatedPosts[index] = updated;
-  this.postsSubject.next(updatedPosts);
+    const updatedPosts = [...currentPosts];
+    updatedPosts[index] = updated;
+    this.postsSubject.next(updatedPosts);
 
-  this.postService.updatePost(updated).pipe(
-    tap((response) => {
-  console.log('API respondeu com:', response);
-  updatedPosts[index] = response;
-  this.postsSubject.next(updatedPosts);
-}),
+    this.postService
+      .updatePost(updated)
+      .pipe(
+        tap((response) => {
+          console.log('API respondeu com:', response);
+          updatedPosts[index] = response;
+          this.postsSubject.next(updatedPosts);
+        }),
 
-    catchError(() => {
-      updatedPosts[index] = original;
-      this.postsSubject.next(updatedPosts);
-      return of(original);
-    })
-  ).subscribe();
+        catchError(() => {
+          updatedPosts[index] = original;
+          this.postsSubject.next(updatedPosts);
+          return of(original);
+        })
+      )
+      .subscribe();
 
-  this.editingPost = null;
-}
+    this.editingPost = null;
+  }
 
   editingPost: Post | null = null;
   startEdit(post: Post): void {
     this.editingPost = post;
   }
 
+  pendingDelete: Post | null = null;
+  startDelete(post: Post): void {
+    this.pendingDelete = post;
+  }
   
+
+  confirmDelete(): void {
+    const post = this.pendingDelete;
+    if (!post) return;
+
+    const currentPosts = this.postsSubject.getValue();
+    const updatedPosts = currentPosts.filter((p) => p.id !== post.id);
+    this.postsSubject.next(updatedPosts); // remoção otimista
+
+    this.postService
+      .deletePost(post.id!)
+      .pipe(
+        catchError(() => {
+          this.postsSubject.next(currentPosts); // rollback
+          return of(null);
+        })
+      )
+      .subscribe();
+
+    this.pendingDelete = null;
+  }
 }

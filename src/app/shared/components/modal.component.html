@@ -1,17 +1,9 @@
-<div
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-  role="dialog"
-  aria-modal="true"
->
-  <div class="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
-    <button
-      (click)="onClose()"
-      class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-      aria-label="Fechar modal"
-    >
-      ✕
-    </button>
-
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded shadow-md w-full max-w-lg">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold">{{ title }}</h2>
+      <button (click)="close.emit()" class="text-gray-500 hover:text-black">×</button>
+    </div>
     <ng-content></ng-content>
   </div>
 </div>

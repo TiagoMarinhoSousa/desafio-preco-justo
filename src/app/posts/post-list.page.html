@@ -30,7 +30,6 @@
         <span *ngIf="sortColumn === 'body'">{{ sortAsc ? '⬆️' : '⬇️' }}</span>
       </th>
       <th class="p-2 text-right">Ações</th>
-
     </tr>
   </thead>
   <tbody>
@@ -38,12 +37,14 @@
       <td class="p-2">{{ post.id }}</td>
       <td class="p-2">{{ post.title }}</td>
       <td class="p-2">{{ post.body }}</td>
-      <td class="p-2 text-right">
+      <td class="p-2 text-right space-x-2">
         <button (click)="startEdit(post)" class="text-blue-600 hover:underline">
           Editar
         </button>
+        <button (click)="startDelete(post)" class="text-red-600 hover:underline">
+          Excluir
+        </button>
       </td>
-      
     </tr>
   </tbody>
 </table>
@@ -67,18 +68,32 @@
 </div>
 
 <!-- Modal de criação -->
-<app-modal *ngIf="showModal" (close)="showModal = false">
+<app-modal *ngIf="showModal" title="Novo Post" (close)="showModal = false">
   <app-post-form
     (submitPost)="handleModalSubmit($event)"
     (cancel)="showModal = false"
   ></app-post-form>
 </app-modal>
+<!-- Modal de edição -->
 
-<app-modal *ngIf="editingPost" (close)="editingPost = null">
+<app-modal *ngIf="editingPost" title="Editar Post" (close)="editingPost = null">
   <app-post-form
     [post]="editingPost"
     (submitPost)="handleEditSubmit($event)"
     (cancel)="editingPost = null"
   ></app-post-form>
+</app-modal>
+
+<!-- Modal de confirmação de exclusão -->
+<app-modal
+  *ngIf="pendingDelete"
+  title="Confirmar Exclusão"
+  (close)="pendingDelete = null"
+>
+  <p class="mb-4">Tem certeza que deseja excluir o post "{{ pendingDelete.id }}"?</p>
+  <div class="flex justify-end gap-2">
+    <button (click)="pendingDelete = null" class="bg-gray-300 px-4 py-2 rounded">Cancelar</button>
+    <button (click)="confirmDelete()" class="bg-red-600 text-white px-4 py-2 rounded">Confirmar</button>
+  </div>
 </app-modal>
 
